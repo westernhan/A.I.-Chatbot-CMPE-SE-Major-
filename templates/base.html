@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<title>HAL</title>
+<head>
+<link/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <link rel="stylesheet" id="theme-link" href="{{ url_for('static', filename='css/chatbotStyle.css') }}"> -->
+<link rel="stylesheet" id="theme-link" href="../static/css/chatbotStyle.css">
+</head>
+
+<body class>
+<div class = "box">
+  <button class="button"><span>Dark Mode </span></button>
+</div>
+
+<script>
+  const btn = document.querySelector(".button");
+  const theme = document.querySelector("#theme-link");
+  btn.addEventListener("click", function() {
+
+    if (theme.getAttribute("href") == "../static/css/chatbotStyle.css") {
+      theme.href = "../static/css/darkmode.css";
+    } else {
+      theme.href = "../static/css/chatbotStyle.css";
+    }
+  });
+</script>
+
+<!-- box changed to container -->
+<div class="container">
+    <h1>CMPE/SE Advising</h1>
+
+    <div class = "chatbot">
+
+        <div id="chatbox">
+            <p class="botText">
+                <span>Hi! Ask me a question related to CMPE or SE advising. If my response doesn't make sense then I might not support that question and you should ask me how your advisor is and book a meeting or you can try rewording the question and ask it again.</span>
+            </p>
+        </div>
+
+        <div id="userInput">
+          <div class = "inputBox">
+            <input id="textInput" type="text" name="msg" placeholder="Type your message here" />
+          </div>
+        </div>
+  </div>
+
+  <script>
+      function getBotResponse() {
+      var rawText = $("#textInput").val();
+      var userHtml = '<p class="userText"><span>' + rawText + "</span></p>";
+      $("#textInput").val("");
+      $("#chatbox").append(userHtml);
+      document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+      $.get("/get", { msg: rawText }).done(function(data) {
+          var botHtml = '<p class="botText"><span>' + data + "</span></p>";
+          $("#chatbox").append(botHtml);
+          document
+          .getElementById("userInput")
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+      }
+      $("#textInput").keypress(function(e) {
+      if (e.which == 13) {
+          getBotResponse();
+      }
+      });
+  </script>
+</div>
+</body>
+</html>
